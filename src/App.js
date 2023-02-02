@@ -1,24 +1,29 @@
-import logo from './logo.svg';
-import './App.css';
-
+import "./App.css";
+import Capture from "./components/CaptureWine/Capture";
+import WineList from "./components/Lists/WineList";
+// import UpdateWine from "./components/Update/UpdateWine";
+import Cellar from "./components/Cellars/Cellar";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 function App() {
+  const updateView = (id) => {
+    window.location.href = "./edit/" + id;
+  };
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <Router>
+        {" "}
+        <Routes>
+          <Route path="/capture" element={<Capture />}></Route>
+          <Route path="/cellar" element={<Cellar />}></Route>
+          <Route path="/capture/:wineid" element={<Capture />}></Route>
+          <Route
+            path="/"
+            element={<WineList updateView={updateView} />}
+          ></Route>
+          {/* <Route path="/edit/:id" element={<UpdateWine />}></Route> */}
+        </Routes>
+      </Router>
+    </>
   );
 }
 
