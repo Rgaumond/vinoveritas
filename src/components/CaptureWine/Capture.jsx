@@ -14,6 +14,7 @@ const initialValues = {
   country: "",
   commentary: "",
   region: "",
+  img: "",
 };
 const Capture = (props) => {
   const [currentWine, setCurrentWine] = useState({});
@@ -30,29 +31,23 @@ const Capture = (props) => {
 
   const addWine = (values) => {
     //console.log(values);
-    console.log(process.env.REACT_APP_ENPOINT_URL + "/wines/add");
     return fetch(process.env.REACT_APP_ENPOINT_URL + "/wines/add", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(values),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        window.location.href = process.env.REACT_APP_HOME;
-      });
+    }).then(() => {
+      window.location.href = process.env.REACT_APP_HOME;
+    });
   };
 
   const updateWine = (values) => {
-    //console.log(values);
     return fetch(process.env.REACT_APP_ENPOINT_URL + "/wines/update", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(values),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        window.location.href = process.env.REACT_APP_HOME;
-      });
+    }).then(() => {
+      window.location.href = process.env.REACT_APP_HOME;
+    });
   };
 
   const fetchData = () => {
@@ -94,7 +89,8 @@ const Capture = (props) => {
       document.getElementById("deleteButton").innerHTML = "Éliminer";
       document.getElementById("qty").readOnly = true;
       document.getElementById("qty").addEventListener("click", () => {
-        alert("Go to cellar");
+        window.location.href =
+          process.env.REACT_APP_HOME + "/Cellar/" + params.wineid;
       });
     } else {
       document.getElementById("submitButton").innerHTML = "Enregistrer";
@@ -195,6 +191,17 @@ const Capture = (props) => {
           handleChange={handleChange}
           defaultValue={currentWine.commentary}
           cssstyle="comment-area"
+        ></Input>
+      </div>
+      <div className={"list-item-container"}>
+        <Input
+          id="img"
+          type="text"
+          message="Image"
+          label="Image"
+          name="img"
+          handleChange={handleChange}
+          defaultValue={currentWine.img}
         ></Input>
       </div>
       <div className={"button-container"}>

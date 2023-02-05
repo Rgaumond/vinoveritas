@@ -44,3 +44,19 @@ code {
 .wine-button {
   margin: 5px !important;
 }
+
+.wine-info-img {
+  background-size: contain;
+  background-repeat: no-repeat;
+  display: flex;
+  width: 100%;
+  height: 200px;
+}
+
+.wine-info {
+  position: absolute;
+  height: 200px;
+  background: rgb(250, 250, 250);
+  width: 60%;
+  right: 0;
+}

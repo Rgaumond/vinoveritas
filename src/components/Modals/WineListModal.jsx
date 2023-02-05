@@ -4,19 +4,15 @@ import Modal from "react-bootstrap/Modal";
 import Input from "../Form/Input";
 import Select from "../Form/Select";
 
-const groups = [
-  { id_: 0, name: "Rouge" },
-  { id_: 1, name: "Blanc" },
-  { id_: 2, name: "Rosé" },
-  { id_: 3, name: "Mousseux" },
-  { id_: 4, name: "Champagne" },
-];
 const WineDetail = (props) => {
   const [wines, setWines] = useState([]);
   const [searchValue, setSearchValue] = useState("");
   const [wineGroup, setWineGroup] = React.useState("Rouge");
+
   //const handleOpen = () => setOpen(true);
   const handleClose = () => {
+    setSearchValue("");
+
     props.setOpen(false);
   };
 
@@ -31,37 +27,48 @@ const WineDetail = (props) => {
   };
 
   const filteredWine = wines.filter((wine) => {
-    if (wine.qty > 0) {
-      if (searchValue === "" && wine.group === wineGroup) {
-        // let result = wines.find((a) => a.group === wineGroup);
+    if (searchValue === "" && wine.group === wineGroup) {
+      // let result = wines.find((a) => a.group === wineGroup);
+      return wine;
+    } else {
+      if (
+        wine.name.toLowerCase().includes(searchValue.toLowerCase()) &&
+        wine.group === wineGroup
+      )
         return wine;
-      } else {
-        if (
-          wine.name.toLowerCase().includes(searchValue.toLowerCase()) &&
-          wine.group === wineGroup
-        )
-          return wine;
-      }
     }
   });
   const sortByName = (wines) => {
     wines.sort((a, b) => (a.name > b.name ? 1 : -1));
-    console.log(props.wineid);
     return wines;
   };
 
-  const updateView = (wineid, wineName, wineGroup) => {
+  const updateView = (wineid, wineName, wineGroup, qty) => {
     let locObj = {};
-    locObj._id = props.locationid;
     locObj.winegroup = wineGroup;
     locObj.wineid = wineid;
     locObj.winename = wineName;
-    return fetch(process.env.REACT_APP_ENPOINT_URL + "/locations/update", {
+    locObj.locations = props.locationArray;
+    locObj.qty = qty;
+    runUpdateView(locObj);
+  };
+
+  const runUpdateView = async (locObj) => {
+    return fetch(process.env.REACT_APP_ENPOINT_URL + "/locations/updateMany", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(locObj),
-    }).then((data) => {
-      window.location.href = process.env.REACT_APP_HOME + "/cellar";
+    }).then(() => {
+      fetch(process.env.REACT_APP_ENPOINT_URL + "/wines/updateById", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          _id: locObj.wineid,
+          qty: locObj.locations.length + locObj.qty,
+        }),
+      }).then((data) => {
+        window.location.href = process.env.REACT_APP_HOME + "/Cellar";
+      });
     });
   };
   const takeWine = (wineid, locationId) => {
@@ -82,11 +89,10 @@ const WineDetail = (props) => {
       })
         .then((response) => response.json())
         .then((data) => {
-          console.log(JSON.stringify(data.wine[0]));
           fetch(process.env.REACT_APP_ENPOINT_URL + "/wines/update", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(data.wine[0]),
+            body: JSON.stringify(data.obj[0]),
           }).then((data) => {
             window.location.href = process.env.REACT_APP_HOME + "/Cellar";
           });
@@ -97,7 +103,7 @@ const WineDetail = (props) => {
     return fetch(process.env.REACT_APP_ENPOINT_URL + "/wines")
       .then((response) => response.json())
       .then((data) => {
-        setWines(sortByName(data.wines));
+        setWines(sortByName(data.obj));
       });
   };
 
@@ -137,7 +143,7 @@ const WineDetail = (props) => {
                 ></Input>
               </div>
               <div style={{ display: "flex", right: 0 }}>
-                <Select handleChange={filterRed} list={groups} name="Type" />
+                <Select handleChange={filterRed} list="type" name="type" />
               </div>
             </div>
             {filteredWine.map((wine) => {
@@ -145,7 +151,7 @@ const WineDetail = (props) => {
                 <div
                   className={"list-item-container"}
                   onClick={() => {
-                    updateView(wine._id, wine.name, wine.group);
+                    updateView(wine._id, wine.name, wine.group, wine.qty);
                   }}
                 >
                   <div className={""}>
@@ -167,6 +173,9 @@ const WineDetail = (props) => {
       </>
     );
   } else {
+    let currentWine = wines.find((obj) => {
+      return obj._id === props.wineid;
+    });
     return (
       <>
         <Modal
@@ -177,9 +186,22 @@ const WineDetail = (props) => {
           locationid={props.locationid}
         >
           <Modal.Header closeButton>
-            <Modal.Title>{props.currentwine}</Modal.Title>
+            <Modal.Title>Votre choix</Modal.Title>
           </Modal.Header>
-          <Modal.Body>We have wine!</Modal.Body>
+          <Modal.Body>
+            <div
+              className={"wine-info-img"}
+              style={{
+                backgroundImage: "url(" + currentWine.img + ")",
+              }}
+            >
+              <div className={"wine-info"}>
+                {currentWine.name} {currentWine.millesime}
+                <br />
+                reste: {currentWine.qty}
+              </div>
+            </div>
+          </Modal.Body>
           <Modal.Footer>
             <Button variant="secondary" onClick={handleClose}>
               Close

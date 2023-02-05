@@ -15,6 +15,7 @@ function App() {
         <Routes>
           <Route path="/capture" element={<Capture />}></Route>
           <Route path="/cellar" element={<Cellar />}></Route>
+          <Route path="/cellar/:wineid" element={<Cellar />}></Route>
           <Route path="/capture/:wineid" element={<Capture />}></Route>
           <Route
             path="/"

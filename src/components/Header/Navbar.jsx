@@ -36,17 +36,25 @@ const Navbar = () => {
       <div className={menu_class}>
         <div
           className="menu-item"
+          onClick={() => (window.location.href = process.env.REACT_APP_HOME)}
+        >
+          Liste
+        </div>
+        <div
+          className="menu-item"
           onClick={() =>
             (window.location.href = process.env.REACT_APP_HOME + "/cellar")
           }
         >
-          Cellar
+          Cellier
         </div>
         <div
           className="menu-item"
-          onClick={() => (window.location.href = process.env.REACT_APP_HOME)}
+          onClick={() =>
+            (window.location.href = process.env.REACT_APP_HOME + "/capture")
+          }
         >
-          Home
+          Ajouter
         </div>
       </div>
     </div>

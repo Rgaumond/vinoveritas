@@ -99,7 +99,7 @@ const WineList = (props) => {
               }}
             >
               <div className={""}>
-                {wine.name} {wine.millesime}
+                {wine.name} {wine.millesime} ({wine.qty})
               </div>
             </div>
           );
