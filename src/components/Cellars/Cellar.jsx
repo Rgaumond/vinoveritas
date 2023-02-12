@@ -38,7 +38,7 @@ const Cellar = () => {
   };
 
   const refresh = () => {
-    window.location.href = process.env.REACT_APP_HOME + "/Cellar";
+    window.location.reload();
   };
   const fetchData = () => {
     return fetch(process.env.REACT_APP_ENPOINT_URL + "/locations")

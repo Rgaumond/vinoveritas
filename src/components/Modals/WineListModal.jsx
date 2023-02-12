@@ -67,7 +67,7 @@ const WineDetail = (props) => {
           qty: locObj.locations.length + locObj.qty,
         }),
       }).then((data) => {
-        window.location.href = process.env.REACT_APP_HOME + "/Cellar";
+        window.location.href = "../Cellar";
       });
     });
   };
@@ -94,7 +94,7 @@ const WineDetail = (props) => {
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(data.obj[0]),
           }).then((data) => {
-            window.location.href = process.env.REACT_APP_HOME + "/Cellar";
+            window.location.href = "../Cellar";
           });
         });
     });

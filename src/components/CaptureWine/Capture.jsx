@@ -36,7 +36,7 @@ const Capture = (props) => {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(values),
     }).then(() => {
-      window.location.href = process.env.REACT_APP_HOME;
+      window.location.href = "./";
     });
   };
 
@@ -46,7 +46,7 @@ const Capture = (props) => {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(values),
     }).then(() => {
-      window.location.href = process.env.REACT_APP_HOME;
+      window.location.href = "../";
     });
   };
 
@@ -89,8 +89,7 @@ const Capture = (props) => {
       document.getElementById("deleteButton").innerHTML = "Éliminer";
       document.getElementById("qty").readOnly = true;
       document.getElementById("qty").addEventListener("click", () => {
-        window.location.href =
-          process.env.REACT_APP_HOME + "/Cellar/" + params.wineid;
+        window.location.href = "../Cellar/" + params.wineid;
       });
     } else {
       document.getElementById("submitButton").innerHTML = "Enregistrer";
