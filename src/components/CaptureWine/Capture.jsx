@@ -18,7 +18,7 @@ const initialValues = {
 };
 const Capture = (props) => {
   const [currentWine, setCurrentWine] = useState({});
-  const [dataIsReturned, setDataReturned] = useState(false);
+  //const [dataIsReturned, setDataReturned] = useState(false);
 
   const params = useParams();
   const handleChange = (e) => {
@@ -58,14 +58,14 @@ const Capture = (props) => {
         .then((response) => response.json())
         .then((data) => {
           setCurrentWine(data.obj[0]);
-          setDataReturned(true);
+          //setDataReturned(true);
           // values = JSON.parse(JSON.stringify(data.wine));
           // setDataReturned(true);
           //console.log(data.wine[0]);
         });
     } else {
       setCurrentWine(initialValues);
-      setDataReturned(true);
+      //setDataReturned(true);
     }
   };
 
