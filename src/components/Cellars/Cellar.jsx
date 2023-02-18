@@ -44,7 +44,7 @@ const Cellar = () => {
     return fetch(process.env.REACT_APP_ENPOINT_URL + "/locations")
       .then((response) => response.json())
       .then((data) => {
-        data.locations.sort((a, b) => (a.name > b.name ? 1 : -1));
+        //data.locations.sort((a, b) => (a.name > b.name ? 1 : -1));
         setlocations(data.locations);
       });
   };
