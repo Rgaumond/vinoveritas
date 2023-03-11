@@ -101,6 +101,33 @@ const Capture = (props) => {
     }
   };
 
+  const fileHandler = (e) => {
+    console.log(e.target.files[0]);
+  };
+  const imageFile = () => {
+    console.log("image" + currentWine.img);
+    if (currentWine.img !== undefined) {
+      return (
+        <Input
+          id="img"
+          type="text"
+          message="Image"
+          label="Image"
+          name="img"
+          handleChange={handleChange}
+          defaultValue={currentWine.img}
+        ></Input>
+      );
+    } else {
+      return (
+        <>
+          <Input id="img" type="file" label="Image" name="img"></Input>
+          <button onClick={fileHandler}>Enregistrer</button>
+        </>
+      );
+    }
+  };
+
   //Called once after the render (component is mounted) - the array is the dependency array basically the parameters which trigger the function is they are changed
   useEffect(() => {
     fetchData();
@@ -192,17 +219,7 @@ const Capture = (props) => {
           cssstyle="comment-area"
         ></Input>
       </div>
-      <div className={"list-item-container"}>
-        <Input
-          id="img"
-          type="text"
-          message="Image"
-          label="Image"
-          name="img"
-          handleChange={handleChange}
-          defaultValue={currentWine.img}
-        ></Input>
-      </div>
+      <div className={"list-item-container"}>{imageFile()}</div>
       <div className={"button-container"}>
         <Button
           id="deleteButton"
