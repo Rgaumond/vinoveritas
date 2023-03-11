@@ -17,7 +17,7 @@
   display: flex;
   padding: 0;
   border: 5px solid rgb(188, 124, 20);
-  margin-bottom: 50px;
+  margin-bottom: 20px;
 }
 
 .c_column {
@@ -102,8 +102,18 @@
   height: 250px;
   justify-content: center;
   display: flex;
-
   background-color: darkgray;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.fridge_cellar_container {
+  width: 184px;
+  height: 50px;
+  justify-content: center;
+  display: flex;
+
+  background-color: rgb(40, 130, 186);
   flex-wrap: wrap;
 }
 
@@ -200,4 +210,12 @@
   border-radius: 5px;
   margin: 0 20px;
   color: red;
+}
+
+.section_container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.section_title {
 }
