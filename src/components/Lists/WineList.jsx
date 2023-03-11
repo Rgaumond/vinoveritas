@@ -3,34 +3,42 @@ import Input from "../Form/Input";
 import Select from "../Form/Select";
 
 //type WineObj = { id_: String, name: string }[];
-const groups = [
-  { id_: 0, name: "Rouge" },
-  { id_: 1, name: "Blanc" },
-  { id_: 2, name: "Rosé" },
-  { id_: 3, name: "Mousseux" },
-  { id_: 4, name: "Champagne" },
-];
+// const groups = [
+//   { id_: 0, name: "Rouge" },
+//   { id_: 1, name: "Blanc" },
+//   { id_: 2, name: "Rosé" },
+//   { id_: 3, name: "Mousseux" },
+//   { id_: 4, name: "Champagne" },
+//   { id_: 4, name: "All" },
+// ];
 
 const WineList = (props) => {
   const [searchValue, setSearchValue] = useState("");
   const [wines, setWines] = useState([]);
-  const [wineGroup, setWineGroup] = React.useState("Rouge");
+  const [wineGroup, setWineGroup] = React.useState("All");
   const [dataIsReturned, setDataReturned] = useState(false);
-  // const [group, setGroup] = useState("Rouge");
+  const [group, setGroup] = useState("All");
 
   const handleInputChange = (event) => {
     setSearchValue(event.target.value);
   };
 
   const sortByMillesime = (wines) => {
-    wines.sort((a, b) => (a.millesime > b.millesime ? 1 : -1));
-    return wines;
+    //if (params.wineid)
+    const filtered = wines.filter(inStock);
+
+    filtered.sort((a, b) => (a.millesime > b.millesime ? 1 : -1));
+    return filtered;
+  };
+
+  const inStock = (wines) => {
+    return wines.qty > 0;
   };
 
   const filteredWine = wines.filter((wine) => {
-    if (searchValue === "" && wine.group === wineGroup) {
-      // let result = wines.find((a) => a.group === wineGroup);
-      return wine;
+    if (searchValue === "") {
+      if (wineGroup === "All") return wine;
+      else if (wine.group === wineGroup) return wine;
     } else {
       if (
         wine.name.toLowerCase().includes(searchValue.toLowerCase()) &&
@@ -53,6 +61,7 @@ const WineList = (props) => {
     setWineGroup(e.target.value);
     // setGroup(e.target.value);
     setSearchValue(searchValue);
+    setGroup(e.target.value);
   };
 
   const editWine = (id) => {
@@ -86,7 +95,12 @@ const WineList = (props) => {
             ></Input>
           </div>
           <div style={{ display: "flex", right: 0 }}>
-            <Select handleChange={filterRed} list="type" name="Type" />
+            <Select
+              handleChange={filterRed}
+              defaultValue={group}
+              list="type"
+              name="Type"
+            />
           </div>
         </div>
 

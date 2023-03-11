@@ -12,6 +12,7 @@ const Cellar = () => {
   const [wineId, setWineId] = React.useState("");
   const [currentWine, setCurrentWine] = React.useState("");
   const params = useParams();
+  const [cellarEmptyCellCount, setCellarEmptyCellCount] = useState(0);
   let center_counter = 0;
   // const handleChange = (e) => {
   //   handleChange(e);
