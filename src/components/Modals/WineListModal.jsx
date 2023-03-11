@@ -7,7 +7,8 @@ import Select from "../Form/Select";
 const WineDetail = (props) => {
   const [wines, setWines] = useState([]);
   const [searchValue, setSearchValue] = useState("");
-  const [wineGroup, setWineGroup] = React.useState("Rouge");
+  const [wineGroup, setWineGroup] = React.useState("All");
+  const [group, setGroup] = useState("All");
 
   //const handleOpen = () => setOpen(true);
   const handleClose = () => {
@@ -24,12 +25,13 @@ const WineDetail = (props) => {
     setWineGroup(e.target.value);
     // setGroup(e.target.value);
     setSearchValue(searchValue);
+    setGroup(e.target.value);
   };
 
   const filteredWine = wines.filter((wine) => {
-    if (searchValue === "" && wine.group === wineGroup) {
-      // let result = wines.find((a) => a.group === wineGroup);
-      return wine;
+    if (searchValue === "") {
+      if (wineGroup === "All") return wine;
+      else if (wine.group === wineGroup) return wine;
     } else {
       if (
         wine.name.toLowerCase().includes(searchValue.toLowerCase()) &&
@@ -143,7 +145,12 @@ const WineDetail = (props) => {
                 ></Input>
               </div>
               <div style={{ display: "flex", right: 0 }}>
-                <Select handleChange={filterRed} list="type" name="type" />
+                <Select
+                  handleChange={filterRed}
+                  defaultValue={group}
+                  list="type"
+                  name="type"
+                />
               </div>
             </div>
             {filteredWine.map((wine) => {
