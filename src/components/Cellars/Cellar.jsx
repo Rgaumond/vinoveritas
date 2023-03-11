@@ -13,6 +13,11 @@ const Cellar = () => {
   const [currentWine, setCurrentWine] = React.useState("");
   const params = useParams();
   const [cellarEmptyCellCount, setCellarEmptyCellCount] = useState(0);
+  const [kitchenEmptyCellCount, setKitchenEmptyCellCount] = useState(0);
+  const [cellarCellCount, setCellarCellCount] = useState(0);
+  const [kitchenCellCount, setKitchenCellCount] = useState(0);
+  const [fridgeCellCount, setFridgeCellCount] = useState(0);
+
   let center_counter = 0;
   // const handleChange = (e) => {
   //   handleChange(e);
@@ -45,9 +50,38 @@ const Cellar = () => {
     return fetch(process.env.REACT_APP_ENPOINT_URL + "/locations")
       .then((response) => response.json())
       .then((data) => {
-        //data.locations.sort((a, b) => (a.name > b.name ? 1 : -1));
+        setWineCount(data.locations);
         setlocations(data.locations);
       });
+  };
+  const setWineCount = (data) => {
+    let cellarCounter = 0;
+    let kitchenCounter = 0;
+    let fridgeCounter = 0;
+    let cellarEmptyCounter = 0;
+    let kitchenEmptyCounter = 0;
+    data.forEach(function (item, index) {
+      if (item.wineid === "") {
+        if (item._id.startsWith("c")) {
+          cellarEmptyCounter++;
+        } else if (item._id.startsWith("k")) {
+          kitchenEmptyCounter++;
+        }
+      }
+      if (item._id.startsWith("c")) {
+        cellarCounter++;
+      } else if (item._id.startsWith("k")) {
+        kitchenCounter++;
+      }
+      if (item._id.startsWith("f") && item.wineid !== "") {
+        fridgeCounter++;
+      }
+    });
+    setKitchenEmptyCellCount(kitchenEmptyCounter);
+    setCellarEmptyCellCount(cellarEmptyCounter);
+    setKitchenCellCount(kitchenCounter);
+    setCellarCellCount(cellarCounter);
+    setFridgeCellCount(fridgeCounter);
   };
 
   useEffect(() => {
@@ -100,7 +134,11 @@ const Cellar = () => {
         locationArray={locationArray}
         setOpen={setOpen}
       />
-      <div class="inner_container">
+      <div class="section_container">
+        <div>
+          Cellier contient:{cellarCellCount - cellarEmptyCellCount - 2} libre:
+          {cellarEmptyCellCount - 1}
+        </div>
         <div class="cellar_container">
           <div className="c_column">
             {locations.map((loc) => {
@@ -197,23 +235,52 @@ const Cellar = () => {
             })}
           </div>
         </div>
-        <div class="kitchen_cellar_container">
-          {locations.map((loc) => {
-            let style = "octagon";
-            if (loc._id.startsWith("kc")) {
-              return (
-                <div
-                  className={style}
-                  id={loc._id}
-                  onClick={() => {
-                    handleClick(loc._id, loc.wineid, loc.winename);
-                  }}
-                >
-                  <div>{setOctagonColor(loc.winegroup)}</div>
-                </div>
-              );
-            }
-          })}
+        <div class="section_container">
+          <div class="section_title">
+            Cuisine contient:
+            {kitchenEmptyCellCount - kitchenCellCount} libre:{kitchenCellCount}
+          </div>
+          <div class="kitchen_cellar_container">
+            {locations.map((loc) => {
+              let style = "octagon";
+              if (loc._id.startsWith("kc")) {
+                return (
+                  <div
+                    className={style}
+                    id={loc._id}
+                    onClick={() => {
+                      handleClick(loc._id, loc.wineid, loc.winename);
+                    }}
+                  >
+                    <div>{setOctagonColor(loc.winegroup)}</div>
+                  </div>
+                );
+              }
+            })}
+          </div>
+        </div>
+        <div class="section_container">
+          <div class="section_title">
+            Réfrigérateur contient:{fridgeCellCount}
+          </div>
+          <div class="fridge_cellar_container">
+            {locations.map((loc) => {
+              let style = "octagon";
+              if (loc._id.startsWith("fa")) {
+                return (
+                  <div
+                    className={style}
+                    id={loc._id}
+                    onClick={() => {
+                      handleClick(loc._id, loc.wineid, loc.winename);
+                    }}
+                  >
+                    <div>{setOctagonColor(loc.winegroup)}</div>
+                  </div>
+                );
+              }
+            })}
+          </div>
         </div>
       </div>
       <div id="footerContainer">
