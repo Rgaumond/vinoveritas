@@ -3,6 +3,7 @@ import Input from "../Form/Input";
 import Select from "../Form/Select";
 import { useParams } from "react-router-dom";
 import Button from "react-bootstrap/Button";
+import axios from "axios";
 const initialValues = {
   name: "",
   qty: "0",
@@ -18,6 +19,8 @@ const initialValues = {
 };
 const Capture = (props) => {
   const [currentWine, setCurrentWine] = useState({});
+  const [imgFile, setImgFile] = useState({});
+
   //const [dataIsReturned, setDataReturned] = useState(false);
 
   const params = useParams();
@@ -102,10 +105,18 @@ const Capture = (props) => {
   };
 
   const fileHandler = (e) => {
-    console.log(e.target.files[0]);
+    setImgFile(e.target.files[0]);
   };
+
+  const fileUploadHandler = () => {
+    const fd = new FormData();
+    fd.append("image", imgFile, imgFile.name);
+    axios.post(process.env.REACT_APP_ENPOINT_URL + "/file", fd).then((res) => {
+      console.log(res);
+    });
+  };
+
   const imageFile = () => {
-    console.log("image" + currentWine.img);
     if (currentWine.img !== undefined) {
       return (
         <Input
@@ -121,8 +132,15 @@ const Capture = (props) => {
     } else {
       return (
         <>
-          <Input id="img" type="file" label="Image" name="img"></Input>
-          <button onClick={fileHandler}>Enregistrer</button>
+          <Input
+            id="img"
+            type="file"
+            label="Image"
+            name="img"
+            handleChange={fileHandler}
+          ></Input>
+
+          <button onClick={fileUploadHandler}>Enregistrer</button>
         </>
       );
     }
